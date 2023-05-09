@@ -3,6 +3,7 @@ package com.chris.helloapp.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,13 +18,16 @@ public class HelloController {
 
     @Autowired
     private DiscoveryClient client;
+    
+    @Autowired
+    private Environment env;
 
     @RequestMapping(value = {"/helloAWS"}, method = {RequestMethod.GET})
     public String helloAws() {
 //        ServiceInstance instance = this.client.getInstances();
 //        this.logger.info("/helloAWS, host:" + instance.getHost() + " server_id:" + instance.getServiceId());
         this.logger.info("Call /helloAWS.");
-        return "Hello! Spring Cloud on AWS!";
+        return "Hello! Spring Cloud on AWS! From Pod: " + env.getProperty("HOSTNAME");
     }
 
 }

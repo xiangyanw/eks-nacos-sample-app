@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aws-hello
+  labels:
+    app: aws-hello
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: aws-hello
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: aws-hello
+    spec:
+      #serviceAccountName: spring-cloud
+      containers:
+      - image: 625011733915.dkr.ecr.ap-northeast-1.amazonaws.com/springclouddemo/hello-app:0.0.1-SNAPSHOT
+        imagePullPolicy: Always
+        name: aws-hello
+        resources:
+          limits:
+            cpu: "1"
+          requests:
+            cpu: "100m"
+        command: ["/bin/sh","-c"]
+        args: ["/springCloud/env.sh"]
+        ports:
+        - containerPort: 8080
+          protocol: TCP
