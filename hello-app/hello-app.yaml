@@ -1,3 +1,4 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -35,3 +36,15 @@ spec:
         ports:
         - containerPort: 8080
           protocol: TCP
+        volumeMounts:
+            - name: app-properties
+              mountPath: /springCloud/conf/application.properties
+              subPath: application.properties
+              readOnly: true
+      volumes:
+        - name: app-properties
+          secret:
+            secretName: aws-hello
+            items:
+            - key: application.properties
+              path: application.properties
